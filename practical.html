@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Factorial Calculator</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            margin-top: 50px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Factorial Calculator</h2>
+
+    <input type="number" id="num" placeholder="Enter a number">
+    <button onclick="findFactorial()">Calculate</button>
+
+    <p id="result"></p>
+
+    <script>
+        function findFactorial() {
+            let num = document.getElementById("num").value;
+            let result = document.getElementById("result");
+
+            if (num < 0) {
+                result.innerHTML = "Factorial not possible";
+            } 
+            else if (num == 0) {
+                result.innerHTML = "Factorial is 1";
+            } 
+            else {
+                let fact = 1;
+                for (let i = 1; i <= num; i++) {
+                    fact *= i;
+                }
+                result.innerHTML = "Factorial is " + fact;
+            }
+        }
+    </script>
+
+</body>
+</html>

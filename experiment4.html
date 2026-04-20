@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 400px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            width: 150px;
+            border: 1px solid #aaa;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #eee;
+            border: 1px solid #777;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        #dynamic-inputs {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .mark-input {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Student Result Calculator</h2>
+    
+    <div class="input-group">
+        <label>Enter Number of Subjects: </label>
+        <input type="number" id="numSubjects" min="1">
+    </div>
+    
+    <button onclick="generateInputs()">Calculate Result</button>
+
+    <div id="dynamic-inputs"></div>
+    <div id="result"></div>
+</div>
+
+<script>
+    function generateInputs() {
+        const num = document.getElementById('numSubjects').value;
+        const container = document.getElementById('dynamic-inputs');
+        const resultDiv = document.getElementById('result');
+        
+        container.innerHTML = ''; // Clear previous inputs
+        resultDiv.innerHTML = '';
+
+        if (num <= 0) {
+            alert("Please enter a valid number of subjects.");
+            return;
+        }
+
+        // Create input fields for each subject
+        for (let i = 1; i <= num; i++) {
+            const div = document.createElement('div');
+            div.className = 'mark-input';
+            div.innerHTML = `
+                <label>Subject ${i} Marks:</label>
+                <input type="number" class="subject-marks" max="100" min="0">
+            `;
+            container.appendChild(div);
+        }
+
+        // Add a final button to do the math
+        const calcBtn = document.createElement('button');
+        calcBtn.innerText = "Get Final Score";
+        calcBtn.style.marginTop = "10px";
+        calcBtn.onclick = calculateFinal;
+        container.appendChild(calcBtn);
+    }
+
+    function calculateFinal() {
+        const marks = document.querySelectorAll('.subject-marks');
+        let total = 0;
+        let count = marks.length;
+
+        marks.forEach(input => {
+            total += Number(input.value);
+        });
+
+        const percentage = (total / (count * 100)) * 100;
+        
+        document.getElementById('result').innerHTML = `
+            <hr>
+            Total Marks: ${total} <br>
+            Percentage: ${percentage.toFixed(2)}%
+        `;
+    }
+</script>
+
+</body>
+</html>

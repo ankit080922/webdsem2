@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Salary Management System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #1c1e21;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #addBtn {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+
+        #output {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 13px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Employee Salary Management System</h2>
+    
+    <input type="text" id="empName" placeholder="Employee Name">
+    <input type="text" id="empID" placeholder="Employee ID">
+    <input type="number" id="empSalary" placeholder="Salary">
+    <input type="text" id="empDept" placeholder="Department">
+
+    <button id="addBtn" onclick="addEmployee()">Add Employee</button>
+
+    <div class="button-group">
+        <button onclick="displayAll()">Display All</button>
+        <button onclick="filterSalary()">Salary > 50000</button>
+        <button onclick="totalSalary()">Total Salary</button>
+        <button onclick="avgSalary()">Average Salary</button>
+        <button onclick="countDept()">Count by Department</button>
+    </div>
+
+    <div id="output"></div>
+</div>
+
+<script>
+    let employees = [];
+
+    function addEmployee() {
+        const name = document.getElementById('empName').value;
+        const id = document.getElementById('empID').value;
+        const salary = parseFloat(document.getElementById('empSalary').value);
+        const dept = document.getElementById('empDept').value;
+
+        if (name && id && salary && dept) {
+            employees.push({ name, id, salary, dept });
+            alert("Employee added successfully!");
+            clearInputs();
+        } else {
+            alert("Please fill all fields!");
+        }
+    }
+
+    function clearInputs() {
+        document.getElementById('empName').value = '';
+        document.getElementById('empID').value = '';
+        document.getElementById('empSalary').value = '';
+        document.getElementById('empDept').value = '';
+    }
+
+    function showOutput(content) {
+        const out = document.getElementById('output');
+        out.style.display = 'block';
+        out.innerHTML = content;
+    }
+
+    function displayAll() {
+        if (employees.length === 0) return showOutput("No employees found.");
+        let html = "<strong>All Employees:</strong><ul>";
+        employees.forEach(e => {
+            html += `<li>${e.name} (ID: ${e.id}) - $${e.salary} [${e.dept}]</li>`;
+        });
+        html += "</ul>";
+        showOutput(html);
+    }
+
+    function filterSalary() {
+        const highEarners = employees.filter(e => e.salary > 50000);
+        if (highEarners.length === 0) return showOutput("No one earns > 50000.");
+        let html = "<strong>Salary > 50000:</strong><ul>";
+        highEarners.forEach(e => html += `<li>${e.name}: $${e.salary}</li>`);
+        html += "</ul>";
+        showOutput(html);
+    }
+
+    function totalSalary() {
+        const total = employees.reduce((sum, e) => sum + e.salary, 0);
+        showOutput(`<strong>Total Monthly Payroll:</strong> $${total.toLocaleString()}`);
+    }
+
+    function avgSalary() {
+        if (employees.length === 0) return showOutput("No data.");
+        const avg = employees.reduce((sum, e) => sum + e.salary, 0) / employees.length;
+        showOutput(`<strong>Average Salary:</strong> $${avg.toFixed(2)}`);
+    }
+
+    function countDept() {
+        const counts = {};
+        employees.forEach(e => counts[e.dept] = (counts[e.dept] || 0) + 1);
+        let html = "<strong>Department Counts:</strong><ul>";
+        for (let dept in counts) {
+            html += `<li>${dept}: ${counts[dept]} employee(s)</li>`;
+        }
+        html += "</ul>";
+        showOutput(html);
+    }
+</script>
+
+</body>
+</html>
